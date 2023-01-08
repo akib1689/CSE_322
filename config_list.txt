@@ -1,0 +1,166 @@
+======this file contains the basic commands for router and switch======
+
+------to enter into admin mode-----------
+
+prompt>enable
+
+
+------to enter into configuration mode------
+prompt# configure terminal
+
+prompt(config)# hostname _________
+
+------to set password when connected to console 0--------
+prompt(config)# line console 0
+prompt(config-line)# password _______
+prompt(config-line)# login
+prompt(config-line)# exit
+
+
+------to set password when connected to telnet--------
+prompt(config)# line vty 0 4
+prompt(config-line)# password _______
+prompt(config-line)# login
+prompt(config-line)# exit
+
+
+------to set password when entering admin mode--------
+prompt(config)# enable secret _______
+
+
+-------to set banner----------
+prompt(config)# banner motd "__________"
+
+
+-------to encrypt password----------
+prompt(config)# service password-encryption
+
+
+
+-------to save configuration----------
+prompt# copy running-config startup-config
+
+
+
+-------for erase startup-config----------
+prompt# erase startup-config
+
+
+
+-------to reboot the switch----------
+prompt# reload
+
+
+
+-------to configure VLAN 1----------
+prompt(config)# interface vlan 1
+prompt(config-if)# ip address 192.168.---.--- 255.255.255.0
+prompt(config-if)# no shutdown
+
+-------to configure other VLANs----------
+prompt(config)# vlan 2 ---(vlan number)
+prompt(config-vlan)# name _______ ---(vlan name)
+
+-------to verify VLANs----------
+prompt# show vlan brief
+
+
+
+
+-------to configure ports in VLANs----------
+prompt(config)# interface fastethernet 0/1 ---(port number)
+prompt(config-if)# switchport mode access
+prompt(config-if)# switchport access vlan 2 ---(vlan number)
+
+
+
+-------to configure trunk port----------
+prompt(config)# interface fastethernet 0/1 ---(port number)
+prompt(config-if)# switchport mode trunk
+prompt(config-if)# switchport trunk native vlan 1 ---(vlan number)
+prompt(config-if)# switchport trunk allowed vlan 2,3,4 ---(vlan numbers)
+
+
+
+-------to configure Router (extra)----------
+prompt(config)# interface fastEthernet 0/0 --- (port number)
+prompt(config-if)# description _______ --- (description)
+prompt(config-if)# ip address 192.168.---.--- 255.255.255.0
+prompt(config-if)# ipv6 address 2001:db8:0:1::1/64 ---(ipv6 address/prefix length)
+prompt(config-if)# no shutdown
+
+
+-------to verify interface status----------
+prompt# show ip interface brief
+
+
+
+
+
+-------inter VLAN routing----------
+prompt(config)# interface gigabitethernet 0/0.2 ---(port number.vlan number)
+prompt(config-subif)# encapsulation dot1Q 2 ---(vlan number)
+prompt(config-subif)# ip address 192.168.---.--- 255.255.255.0 ---(ip address subnet mask)
+prompt(config-subif)# exit
+prompt(config)# interface gigabitethernet 0/0.3 ---(port number.vlan number)
+prompt(config-subif)# encapsulation dot1Q 3 ---(vlan number)
+prompt(config-subif)# ip address 192.168.---.--- 255.255.255.0 ---(ip address subnet mask)
+prompt(config-subif)# exit
+prompt(config)# interface gigabitethernet 0/0
+prompt(config-if)# no shutdown --- (to enable the port)
+
+==========NAT configuration==========
+----------static NAT----------
+prompt(config)# ip nat inside source static 192.168.---.--- 192.168.---.--- ---(inside ip address outside ip address)
+prompt(config)# interface fastethernet 0/0 ---(port number connected to the inside network)
+prompt(config-if)# ip nat inside
+prompt(config-if)# exit
+prompt(config)# interface fastethernet 0/1 ---(port number)
+prompt(config-if)# ip nat outside
+prompt(config-if)# exit
+
+----------dynamic NAT----------
+prompt(config)# ip nat pool POOL1 192.168.---.--- 192.168.---.--- netmask 255.255.---.--- (start ip address end ip address subnet mask)
+prompt(config)# access-list 1 permit 192.168.0.0 0.0.255.255 ---(ip address subnet mask)
+prompt(config)# ip nat inside source list 1 pool POOL1 ---(access list number pool name)
+prompt(config)# interface fastethernet 0/0 ---(port number connected to the inside network)
+prompt(config-if)# ip nat inside
+prompt(config)# interface fastethernet 0/1 ---(port number)
+prompt(config-if)# ip nat outside
+prompt(config)# exit
+
+----------PAT----------
+prompt(config)# ip nat pool POOL1 192.168.---.--- 192.168.---.--- netmask 255.255.---.--- (start ip address end ip address subnet mask)
+prompt(config)# access-list 1 permit 192.168.0.0 0.0.255.255 ---(ip address subnet mask)
+prompt(config)# ip nat inside source list 1 pool POOL1 overload---(access list number pool name)
+prompt(config)# interface fastethernet 0/0 ---(port number connected to the inside network)
+prompt(config-if)# ip nat inside
+prompt(config)# interface fastethernet 0/1 ---(port number)
+prompt(config-if)# ip nat outside
+prompt(config)# exit
+
+------------------to verify NAT configuration------------------
+prompt# show ip nat translations
+
+------------------to see access list------------------
+prompt# access-list ?
+
+------------------numbered access list------------------
+prompt# access-list (access list number) (permit/deny) (ip address) (subnet mask)
+prompt# access-list (access list number) (remark) (description)
+
+..................to verify access list..................
+prompt# do show access-list
+
+------------------to attach access list to interface------------------
+prompt# interface fastethernet 0/0 ---(port number)
+prompt# ip access-group (access list number) (in/out)
+
+------------------named access list------------------
+prompt# ip access-list (standard/extended) (access list name)
+prompt(config-std-nacl)# (permit/deny) (ip address) (subnet mask)
+prompt(config-std-nacl)# (remark) (description)
+
+..................to verify access list..................
+prompt# show access-list
+
