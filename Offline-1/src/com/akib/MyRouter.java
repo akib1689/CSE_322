@@ -12,7 +12,7 @@ public class MyRouter {
     private final String masterDirectory;
 
     public MyRouter() {
-        this.masterDirectory = "Offline_1 materials";
+        this.masterDirectory = "Offline_1 materials/Offline 1/root";
     }
     public void route(String path, InputStream inputStream, OutputStream outputStream) {
         PrintWriter writer = new PrintWriter(outputStream);
