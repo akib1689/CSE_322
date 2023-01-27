@@ -29,29 +29,32 @@ echo "Sent Packets, Dropped Packets, Received Packets, Throughput, Average Delay
 # for area 
 for area in "${area_array[@]}"
 do
-    echo "Area: $area" >> trace.txt
+    # echo "Area: $area" >> trace.txt
     # iterate the number of nodes with baseline parameters
-    ns wireless.tcl $area $baseline_nodes $baseline_flows $sim_time
+    ns wireless.tcl $baseline_nodes $baseline_flows $area $sim_time
 
     gawk -f parse.awk trace.tr >> trace.txt
 done
+
+echo "-----------------------------------------------------------" >> trace.txt
 
 # for nodes
 for nodes in "${nodes_array[@]}"
 do
-    echo "Number of nodes: $nodes" >> trace.txt
+    # echo "Number of nodes: $nodes" >> trace.txt
     # iterate the number of nodes with baseline parameters
-    ns wireless.tcl $baseline_area $nodes $baseline_flows $sim_time
+    ns wireless.tcl $nodes $baseline_flows $baseline_area $sim_time
 
     gawk -f parse.awk trace.tr >> trace.txt
 done
 
+echo "-----------------------------------------------------------" >> trace.txt
 # for flows
 for flows in "${flows_array[@]}"
 do
-    echo "Number of flows: $flows" >> trace.txt
+    # echo "Number of flows: $flows" >> trace.txt
     # iterate the number of nodes with baseline parameters
-    ns wireless.tcl $baseline_area $baseline_nodes $flows $sim_time
+    ns wireless.tcl $baseline_nodes $flows $baseline_area $sim_time
 
     gawk -f parse.awk trace.tr >> trace.txt
 done
