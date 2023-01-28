@@ -20,19 +20,18 @@ nodes_array=(20 40 60 80 100)
 flows_array=(10 20 30 40 50)
 
 # Simulation time
-sim_time=20
+sim_time=50
 
 #open trace.txt file
-echo "Simulation results" > trace.txt
-echo "Sent Packets, Dropped Packets, Received Packets, Throughput, Average Delay, Delivery ratio, Drop ratio" >> trace.txt
+echo "Sent Packets, Dropped Packets, Received Packets, Throughput, Average Delay, Delivery ratio, Drop ratio" > trace.txt
+
 
 # for area 
 for area in "${area_array[@]}"
 do
     # echo "Area: $area" >> trace.txt
     # iterate the number of nodes with baseline parameters
-    ns wireless.tcl $baseline_nodes $baseline_flows $area $sim_time
-
+    ns wireless.tcl $baseline_nodes $baseline_flows $area $sim_time 
     gawk -f parse.awk trace.tr >> trace.txt
 done
 
@@ -43,8 +42,7 @@ for nodes in "${nodes_array[@]}"
 do
     # echo "Number of nodes: $nodes" >> trace.txt
     # iterate the number of nodes with baseline parameters
-    ns wireless.tcl $nodes $baseline_flows $baseline_area $sim_time
-
+    ns wireless.tcl $nodes $baseline_flows $baseline_area $sim_time 
     gawk -f parse.awk trace.tr >> trace.txt
 done
 
@@ -54,7 +52,7 @@ for flows in "${flows_array[@]}"
 do
     # echo "Number of flows: $flows" >> trace.txt
     # iterate the number of nodes with baseline parameters
-    ns wireless.tcl $baseline_nodes $flows $baseline_area $sim_time
+    ns wireless.tcl $baseline_nodes $flows $baseline_area $sim_time 
 
     gawk -f parse.awk trace.tr >> trace.txt
 done
