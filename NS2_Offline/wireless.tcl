@@ -134,7 +134,7 @@ for {set i 0} {$i < $val(nf)} {incr i} {
         set dst [random_int 0 [expr $val(nn) - 1]]
     }
     # create agent
-    set tcp [new Agent/TCP/Reno]
+    set tcp [new Agent/TCP/Vegas]
     set tcp_sink [new Agent/TCPSink]
     # attach to nodes
     $ns attach-agent $node($src) $tcp
